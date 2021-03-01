@@ -1,0 +1,13 @@
+site_name: DRACO
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - rust
+pages:
+    - 'Overview': 'index.md'
+    - 'draco': 'draco.md'
+    - 'simulate_mm': 'simulate.md'
+markdown_extensions:
+    - markdown.extensions.admonition
