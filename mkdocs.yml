@@ -1,4 +1,4 @@
-site_name: draco-docs
+site_name: DRACO
 theme:
     name: readthedocs
     highlightjs: true
