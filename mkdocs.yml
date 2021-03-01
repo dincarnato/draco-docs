@@ -1,4 +1,4 @@
-site_name: DRACO
+site_name: draco-docs
 theme:
     name: readthedocs
     highlightjs: true
@@ -8,6 +8,6 @@ theme:
 pages:
     - 'Overview': 'index.md'
     - 'draco': 'draco.md'
-    - 'simulate_mm': 'simulate.md'
+    - 'simulate_mm': 'simulate_mm.md'
 markdown_extensions:
     - markdown.extensions.admonition
