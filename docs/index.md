@@ -79,7 +79,7 @@ The `simulate_mm` executable will be located under `target/release/`.
 
 ## Testing your installation
 
-Under `example/` it is possible to find three sample MM files, each one containing simulated data for a single transcript, forming one, two, or three coexisting conformations.<br/>
+Under `examples/` it is possible to find three sample MM files, each one containing simulated data for a single transcript, forming one, two, or three coexisting conformations.<br/>
 To analyze these samples, simply run:
 
 ```bash
