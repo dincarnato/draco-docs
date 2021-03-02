@@ -4,7 +4,7 @@
 
 RNA structures are highly diverse and dynamic. Inside the cell, the same RNA is present in multiple identical copies, and not all of them will fold into the same structure. Rather, many alternative structures (or conformations) for the same RNA coexist in a dynamic equilibrium. In addition to that, each conformation is not static over time, but it can interconvert between any other potential conformation for that RNA. This structurally heterogeneous set of RNAs is commonly referred to as an *ensemble*.
 
-<u>D</u>econvolution of <u>R</u>NA <u>A</u>lternative <u>CO</u>nformations (or __DRACO__), is a method that, by using a combination of spectral deconvolution and fuzzy clustering, can deconvolute the number of coexisting RNA structural conformations in a biological sample, starting from mutational profiling (MaP) data, as well as reconstruct their relative stoichiometries and individual reactivity profiles.
+<u>D</u>econvolution of <u>R</u>NA <u>A</u>lternative <u>CO</u>nformations (or __DRACO__), is a method that, by using a combination of spectral deconvolution and fuzzy clustering, can deconvolute the number of coexisting RNA structural conformations in a biological sample, as well as reconstruct their relative stoichiometries and individual reactivity profiles, starting from mutational profiling (MaP) data.
 
 In order to use DRACO, BAM files from mutational profiling experiments must be pre-processed into  mutation map (MM) files using the [__RNA Framework__](https://github.com/dincarnato/RNAframework). 
 
