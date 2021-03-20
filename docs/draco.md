@@ -171,3 +171,4 @@ __coverage__ | An array of arrays, each one containing the coverage per base for
 __weights__ | An array of arrays, each one containing the weight per base from the Graph-Cut analysis
 __preCoverage__ | An array containing the total coverage per base along the window, calculated using only the reads pre-filtering, covering the entire window, that have been used to perform the spectral analysis (therefore, it can be &lt; than the sum of the __coverage__ arrays)
 
+<br/>
