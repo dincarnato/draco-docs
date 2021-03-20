@@ -158,6 +158,7 @@ __sequence__ | Transcript's sequence
 __nReads__ | Total number of reads mapping to the transcript
 __windows__ | An array containing the deconvolution results for each window set
 
+<br/>
 The __windows__ array is further structured as follows:<br/>
 
 Key    | Description
@@ -169,3 +170,4 @@ __counts__ | An array of arrays, each one containing the number of mutations per
 __coverage__ | An array of arrays, each one containing the coverage per base for each of the reconstructed conformations, calculated using all the assigned reads post-filtering
 __weights__ | An array of arrays, each one containing the weight per base from the Graph-Cut analysis
 __preCoverage__ | An array containing the total coverage per base along the window, calculated using only the reads pre-filtering, covering the entire window, that have been used to perform the spectral analysis (therefore, it can be &lt; than the sum of the __coverage__ arrays)
+
