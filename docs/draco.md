@@ -4,21 +4,6 @@ DRACO uses a sliding window approach to analyze short reads tiling long target t
 <br/><br/>
 For each window, the following analysis steps are performed:<br/>
 
-1. Reads covering the entire window are used to build a graph. In the graph, each base is a vertex; when two bases are observed to co-mutate within the same read, they are connected by an edge in the graph. Each edge, is weighted according to the co-mutation frequency of the two bases (or essentialy, the number of reads in which both bases are simultaneously mutated).
-
-2. From the adjacency matrix of the graph, the normalized Laplacian matrix is calculated.
-
-3. Spectral clustering is applied to this matrix, to identify the number of co-existing structural conformations (clusters) for the window being analyzed.
-
-4. Graph-Cut is then used to weight each vertex in the graph according to its affinity to each conformation.
-
-5. Reads are assigned to each window
-
-5. The window is slid by the chosen offset, and steps 1-4 are repeated, until the entire transcript has been analyzed.
-
-6. Consecutive windows forming the same number of conformations are grouped into *window sets* and merged.
-
-7. For each *window set*, the relative conformation stoichiometries, and the individual reactivity profiles are reconstructed. Window sets found to form different numbers of conformations, are reported separately.
 
 When analyzing a transcript, DRACO keeps in memory all the reads mapping to that transcript. At extreme sequencing depths (&gt;500,000X), the memory consumption can become prohibitive, so it might be beneficial to randomly downsample the reads along the transcript, to achieve a lower mean coverage. Furthermore, as the coverage along the transcript might be unevenly distributed because of library preparation and sequencing biases, downsampling will result in a more uniform coverage. Usually, a coverage of __20,000X__ is sufficient for DRACO to deconvolute the underlying structural heterogeneity.<br/>
 <br/>
