@@ -9,5 +9,6 @@ pages:
     - 'Overview': 'index.md'
     - 'draco': 'draco.md'
     - 'simulate_mm': 'simulate_mm.md'
+    - 'test': 'rf-count.md'
 markdown_extensions:
     - markdown.extensions.admonition
