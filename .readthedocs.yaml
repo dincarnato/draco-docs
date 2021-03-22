@@ -1,6 +1,5 @@
-version: 2
+version: 1.0.4
 
 mkdocs:
   configuration: mkdocs.yml
-  version: 1.0.4
   fail_on_warning: false
