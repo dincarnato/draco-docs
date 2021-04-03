@@ -76,7 +76,7 @@ __--allNonInformativeToOne__ | int | If *all* windows in the transcript are non-
 __--reportNonInformative__ | int | Reports also non-informative windows in the output JSON file
 
 <br/>
-## Understanding DRACO's parameters
+## Understanding the algorithm
 While it is advisable for most users to run DRACO with its default parameters, as these are the results of a careful and thorough calibration, it might be useful to adjust the analysis on a case-by-case basis.<br/>
 <br/>
 DRACO analysis is performed in windows. The size of the window is by default ``winLenFraction`` &times; the median read length; an arbitrary length (in bp) for the window can also be used, by setting ``absWinLen``. Similarly, the slide offset is by default ``winOffsetFraction`` &times; the length of the window, but an arbitrary offset (in bp) can be specified via ``absWinOffset``. When long reads are used, reducing the size of the window might allow the identification of small highly dynamic regions of the target transcript. For instance, if 300 bp-long reads are being used, and the structurally-dynamic region within the target transcript is only 90 nt-long, the spectral analysis might not be able to detect it (especially if probing with DMS, as only ~50% of the bases will be informative); in these situations, reducing the size of the window can increase the sensitivity of the analysis.<br/>
