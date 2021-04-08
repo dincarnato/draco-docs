@@ -172,3 +172,5 @@ __weights__ | An array of arrays, each one containing the weight per base from t
 __preCoverage__ | An array containing the total coverage per base along the window, calculated using only the reads pre-filtering, covering the entire window, that have been used to perform the spectral analysis (therefore, it can be &lt; than the sum of the __coverage__ arrays)
 
 <br/>
+## Post-processing of DRACO output
+DRACO JSON output files can be somehow hard to interpret and process. To facilitate this operation, we developed the ``rf-json2rc`` module, that has been included in the [__RNA Framework__](https://rnaframework-docs.readthedocs.io/en/latest/). The module allows converting the reactivity profiles deconvoluted by DRACO into RNA Count (RC) files, that can be subsequently normalized with the ``rf-norm`` module, and then fed into the ``rf-fold`` module for secondary structure modeling. For additional details, please refer to the ``rf-json2rc`` [docs](https://rnaframework-docs.readthedocs.io/en/latest/rf-json2rc).
