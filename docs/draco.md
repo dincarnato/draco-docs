@@ -14,11 +14,11 @@ For each window, the following analysis steps are performed:<br/>
 
 5. Reads are assigned to each window
 
-5. The window is slid by the chosen offset, and steps 1-4 are repeated, until the entire transcript has been analyzed.
+6. The window is slid by the chosen offset, and steps 1-4 are repeated, until the entire transcript has been analyzed.
 
-6. Consecutive windows forming the same number of conformations are grouped into *window sets* and merged.
+7. Consecutive windows forming the same number of conformations are grouped into *window sets* and merged.
 
-7. For each *window set*, the relative conformation stoichiometries, and the individual reactivity profiles are reconstructed. Window sets found to form different numbers of conformations, are reported separately.
+8. For each *window set*, the relative conformation stoichiometries, and the individual reactivity profiles are reconstructed. Window sets found to form different numbers of conformations, are reported separately.
 
 When analyzing a transcript, DRACO keeps in memory all the reads mapping to that transcript. At extreme sequencing depths (&gt;500,000X), the memory consumption can become prohibitive, so it might be beneficial to randomly downsample the reads along the transcript, to achieve a lower mean coverage. Furthermore, as the coverage along the transcript might be unevenly distributed because of library preparation and sequencing biases, downsampling will result in a more uniform coverage. Usually, a coverage of __20,000X__ is sufficient for DRACO to deconvolute the underlying structural heterogeneity.<br/>
 <br/>
