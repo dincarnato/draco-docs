@@ -11,6 +11,11 @@ In order to use DRACO, BAM files from mutational profiling experiments must be p
 For support requests, please post your questions to: <https://github.com/dincarnato/draco/issues>
 
 
+## Version
+
+The latest stable version of DRACO is __v1.1__ (released on October 8, 2022)<br/>
+
+
 ## Author(s)
 
 Edoardo Morandi (emorandi[at]rnaframework.com) [Main developer]<br/>

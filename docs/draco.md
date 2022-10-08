@@ -20,9 +20,9 @@ For each window, the following analysis steps are performed:<br/>
 
 8. For each *window set*, the relative conformation stoichiometries, and the individual reactivity profiles are reconstructed. Window sets found to form different numbers of conformations, are reported separately.
 
-When analyzing a transcript, DRACO keeps in memory all the reads mapping to that transcript. At extreme sequencing depths (&gt;500,000X), the memory consumption can become prohibitive, so it might be beneficial to randomly downsample the reads along the transcript, to achieve a lower mean coverage. Furthermore, as the coverage along the transcript might be unevenly distributed because of library preparation and sequencing biases, downsampling will result in a more uniform coverage. Usually, a coverage of __20,000X__ is sufficient for DRACO to deconvolute the underlying structural heterogeneity.<br/>
+When analyzing a transcript, DRACO keeps in memory all the reads mapping to that transcript. At extreme sequencing depths (&gt;500,000X), the memory consumption can become prohibitive on some system. If your system does not have sufficient RAM, the reads can be randomly downsampled along the transcript, to achieve a lower mean coverage. Usually, a coverage of __20,000X__ is sufficient for DRACO to efficiently deconvolve the underlying structural heterogeneity.<br/>
 <br/>
-For additional information concerning downsampling, please consult the documentation for the [__rf-count__](https://rnaframework.readthedocs.io/en/latest/rf-count/#downsampling-reads-for-analysis-with-draco) module of the __RNA Framework__.
+For additional information concerning downsampling, please consult the documentation for the [__rf-count__](https://rnaframework-docs.readthedocs.io/en/latest/rf-count/#downsampling-reads-for-analysis-with-draco) module of the __RNA Framework__.
 
 <br/>
 
@@ -36,7 +36,7 @@ $ draco --help
 Parameter         | Type | Description
 ----------------: | :--: |:------------
 __--mm__ | string | Input [mutation map (MM)](https://rnaframework.readthedocs.io/en/latest/rf-count/#mm-mutation-map-format) file
-__--output__ | string | Output JSON file (Default: __draco_deconvoluted.json__)
+__--output__ | string | Output JSON file (Default: __draco_deconvolved.json__)
 __--processors__ | int | Number of processors to use (Default: __0__)<br/>__Note #1:__ when set to 0, all available processors will be used<br/>__Note #2:__ only the analysis of multiple transcripts can be parallelized. If analyzing a single transcript, setting this parameter to a value > 1 will not speed up the execution
 __--whitelist__ | string | A whitelist file, containing the IDs of the transcripts to be analyzed, one per raw (Default: __all transcripts will be analyzed__)
 __--shape__ | | Enables spectral analysis on all four bases (default is only A/C bases)<br/>__Note:__ this feature is highly experimental
@@ -50,7 +50,7 @@ __--maxClusters__ | int | Maximum allowed number of clusters/conformations (Defa
 __--minFilteredReads__ | int | Minimum number of reads (post-filtering) to perform spectral analysis (Default: __5__)
 __--minPermutations__ | int | Minimum number of permutations performed to build the null model (Default: __8__)
 __--maxPermutations__ | int | Maximum number of permutations performed to build the null model (Default: __400__)
-__--firstEigengapThresh__ | float | Threshold to consider the first eigengap (Default: __0.9__)<br/>__Note:__ when this threshold is not met, 0 clusters are reported
+__--firstEigengapShift__ | float | How much the mean of the first eigengap's null model should be shifted by (Default: __0.9__)
 __--eigengapCumRelThresh__ | float | Minimum relative difference between the eigengap and the null model, as a fraction of the cumulative difference between the previous eigengaps and their respective null models (Default: __0.1__)<br/>__Note:__ this does not apply to the first eigengap
 __--eigengapAbsThresh__ | float | Minimum absolute difference between the eigengap and the null model (Default: __0.03__)
 __--alpha__ | float | Below this p-value, the null hypothesis is rejected and the eigengap is marked as informative (Default: __0.01__)
@@ -64,6 +64,9 @@ __--saveEigengapData__ | | Saves eigengap data for plotting (Default: __off__)
 __--eigengapDataOut__ | string | Eigengap data output folder (Default: __./eigengap_data__)
  | | __Graph-Cut options__
 __--minClusterFraction__ | float | Minimum fraction of reads assigned to each cluster/conformation (Default: __0.05__)<br/>__Note:__ if this threshold is not met, the number of clusters is automatically decreased
+__--softClusteringInits__ | float | Number of iterations for the initialization process of the graph-cut.<br/>__Note:__ The initialization with the lowest score is picked (Default: __500__)
+__--softClusteringIters__ | float | Number of iterations performed on graph-cut<br/>__Note:__ The cut with the lowest score is picked (Default: __20__)
+__--softClusteringWeightModule__ | float | The module of the weight that is used to change the cluster weights in order to find the lowest score (Default: __0.005__)
  | | __Windowed analysis options__
 __--winLenFraction__ | float | Length of the window as a fraction of the median read length (Default: __0.9__)<br/>__Note:__ this parameter and ``--absWinSize`` are mutually exclusive
 __--absWinLen__ | int | Absolute length of the window (Default: __0__)<br/>__Note:__ this parameter and ``--winSizeFraction`` are mutually exclusive
@@ -97,7 +100,14 @@ In order to be considered informative, each eigengap must fulfill a number of cr
 
 The analysis terminates when a non-informative eigengap is encountered as, normally, the subsequent eigengaps are non-informative as well. In some particular cases, however, eigengaps have been observed to behave unexpectedly. In such situations, although an eigengap is marked as non-informative, one or more eigengaps immediately downstream of it are again informative. To account for these situations, whenever a non-informative eigengap is encountered, DRACO can perform a *lookahead* evaluation of the ``lookaheadEigengaps`` subsequent eigengaps. If one of these is marked as informative, then the analysis of the eigengaps is allowed to continue.<br/>
 <br/>
-Once the number of conformations has been determined, the algorithm uses a __Graph-Cut__ approach to weight each base in the window, according to its affinity to each of the different conformations. Reads are then assigned to each conformation. If the fraction of reads assigned to a conformation is &lt; ``minClusterFraction``, the number of conformations for the window is decreased by one, and the step is repeated.<br/>
+Once the number of conformations has been determined, the algorithm uses a __normalized Graph-Cut__ approach to weight each base in the window, according to its affinity to each of the different conformations. This approach tries to find the best way to partition the previously built graph. It is composed of two steps:
+
+1. __Initialization__. During this step, each base of each cluster is assigned a random weight. The step is repeated ``softClusteringInits`` times and the solution with the lowest score is picked.
+2. __Refinement__. During this step, the weights of the bases are dynamically altered by ``softClusteringWeightModule`` in an attempt to further minimize the score. This step is repeated ``softClusteringIters`` and the solution with the lowest score is picked.
+
+__Note:__ in the original implementation of DRACO, this step was carried out only once. While being significantly faster, the downside was a higher risk of finding suboptimal graph partitioning solutions, corresponding to local score minima. Lowering the ``softClusteringWeightModule`` and increasing the ``softClusteringIters`` can slow down the analysis, but it significantly increases the likelihood that the *true* optimal solution is identified, further ensuring reproducibility of the analysis results.
+
+Following identification of the optimal graph partitioning, reads are assigned to each conformation. If the fraction of reads assigned to a conformation is &lt; ``minClusterFraction``, the number of conformations for the window is decreased by one, and the step is repeated.<br/>
 <br/>
 Final step of the analysis involves merging consecutive windows, found to form the same number of conformations, into *window sets*. Let's however consider the following case:
 <br/><br/>
@@ -173,4 +183,4 @@ __preCoverage__ | An array containing the total coverage per base along the wind
 
 <br/>
 ## Post-processing of DRACO output
-DRACO JSON output files can be somehow hard to interpret and process. To facilitate this operation, we developed the ``rf-json2rc`` module, that has been included in the [__RNA Framework__](https://rnaframework-docs.readthedocs.io/en/latest/). The module allows converting the reactivity profiles deconvoluted by DRACO into RNA Count (RC) files, that can be subsequently normalized with the ``rf-norm`` module, and then fed into the ``rf-fold`` module for secondary structure modeling. For additional details, please refer to the ``rf-json2rc`` [docs](https://rnaframework-docs.readthedocs.io/en/latest/rf-json2rc).
+DRACO JSON output files can be somehow hard to interpret and process. To facilitate this operation, we developed the ``rf-json2rc`` module, that has been included in the [__RNA Framework__](https://rnaframework-docs.readthedocs.io/en/latest/). The module allows converting the reactivity profiles deconvolved by DRACO into RNA Count (RC) files, that can be subsequently normalized with the ``rf-norm`` module, and then fed into the ``rf-fold`` module for secondary structure modeling. For additional details, please refer to the ``rf-json2rc`` [docs](https://rnaframework-docs.readthedocs.io/en/latest/rf-json2rc).
