@@ -88,7 +88,7 @@ The __spectral deconvolution__ represents the most critical step of the algorith
 <br/>
 Starting with the first eigengap, DRACO compares each eigengap to its respective null model. Aim of this comparison is to determine which eigengaps can be considered to be *informative*, as this directly translates into the number of conformations/clusters formed by the analyzed window. For instance, if the first two eigengaps are informative, two conformations (clusters) are present; if the first three eigengaps are informative, three conformations are present, and so on. 
 <br/><br/>
-![DRACO eigengaps](http://www.rnaframework.com/images/DRACO_eigengaps.png)
+![DRACO eigengaps](http://www.incarnatolab.com/images/docs/draco/DRACO_eigengaps.png)
 <br/><br/>
 In order to be considered informative, each eigengap must fulfill a number of criteria:
 
@@ -111,12 +111,12 @@ Following identification of the optimal graph partitioning, reads are assigned t
 <br/>
 Final step of the analysis involves merging consecutive windows, found to form the same number of conformations, into *window sets*. Let's however consider the following case:
 <br/><br/>
-![DRACO eigengaps](http://www.rnaframework.com/images/DRACO_mergewindows1.png)
+![DRACO eigengaps](http://www.incarnatolab.com/images/docs/draco/DRACO_mergewindows1.png)
 <br/><br/>
 In this situation, two sets of windows found to form two conformations, are interrupted by one window forming one conformation. This often happens with short reads (&lt;100 bp), as the analyzed window might not contain enough information to identify the coexisting conformations. By default (left), DRACO would report three window sets. It is possible to account for these cases, hence allowing DRACO to ignore at most ``maxIgnoreWins`` internal windows forming a discordant number of conformations. For the merging to occur, the total number of external windows on either sides of the discordant internal windows, must be &ge; ``minExtWins``.<br/>
 It is however possible for the windows on the left and on the right sides of the discordant internal windows, to form a different number of conformations:
 <br/><br/>
-![DRACO eigengaps](http://www.rnaframework.com/images/DRACO_mergewindows2.png)
+![DRACO eigengaps](http://www.incarnatolab.com/images/docs/draco/DRACO_mergewindows2.png)
 <br/><br/>
 In such a case, only if the number of windows on one side is &gt; than the number of windows on the other side, as well as &ge; ``minExtWins``, the internal discordant windows will be merged into a single set with the windows on that side.
 <br/><br/>
