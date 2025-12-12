@@ -111,10 +111,12 @@ Unless the parameter `--outputRawNClusters` had been enabled (which would cause 
 1. __Initialization__. During this step, each base of each cluster is assigned a random weight. The step is repeated ``--softClusteringInits`` times and the solution with the lowest score is picked.
 2. __Refinement__. During this step, the weights of the bases are dynamically altered by ``--softClusteringWeightModule`` in an attempt to further minimize the score. This step is repeated ``--softClusteringIters`` and the solution with the lowest score is picked.
 
+<br/>
+
 !!! alert "Note"
     In the original implementation of DRACO, this step was carried out only once. While being significantly faster, the downside was a higher risk of finding suboptimal graph partitioning solutions, corresponding to local score minima. Lowering the ``--softClusteringWeightModule`` and increasing the ``--softClusteringIters`` can slow down the analysis, but it significantly increases the likelihood that the *true* optimal solution is identified, further ensuring reproducibility of the analysis results.
 
-
+<br/>
 Final step of the analysis involves merging consecutive windows found to form the same number of conformations, into *window sets*. Let's however consider the following case:
 <br/><br/>
 ![DRACO eigengaps](http://www.incarnatolab.com/images/docs/draco/DRACO_mergewindows_1.png)
@@ -124,7 +126,11 @@ In this situation, two sets of windows found to form two conformations, are inte
 1. The first possibility is to make DRACO ignore at most ``--maxIgnoreWins`` internal windows forming a discordant number of conformations. For the merging to occur, the total number of external windows on either sides of the discordant internal windows must be &ge; ``--minExtWins`` (see figure above, right panel).
 
 2. The second possibility (preferred, no information loss) is to make DRACO report every *window set* it did identify, but allowing non-contiguous *window sets* forming the same number of conformations to be merged, provided that the overlap between the last window of one set and the first window of the following set is at least `--minWindowsOverlap` &times; the window length (e.g., ``--minWindowsOverlap 0.5`` requires a minimum overlap of 50% of the window length; see figure below).
+
 <br/><br/>
+![DRACO eigengaps](http://www.incarnatolab.com/images/docs/draco/DRACO_mergewindows_2.png)
+<br/><br/>
+
 Following window merging, reads are assigned to each conformation. If the fraction of reads assigned to a conformation is &lt; ``--minClusterFraction`` &times; the number of conformations for that *window set* is decreased by one, and the step is repeated.
 <br/><br/>
 ### Handling of replicates
