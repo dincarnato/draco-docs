@@ -19,6 +19,7 @@ __-p__ *or* __--stoichiometry__ | string | Comma-separated list of % conformatio
 __-c__ *or* __--meanCoverage__ | int | Mean sequencing depth (coverage) per base<br/>__Note:__ this parameter and ``--nReads`` are mutually exclusive
 __-n__ *or* __--nReads__ | int | Number of reads mapping to each transcript<br/>__Note:__ this parameter and ``--meanCoverage`` are mutually exclusive
 __--probability__ | float | Sets the *p* value for generation of the binomial distribution of mutations (Default: __0.01927__)<br/>__Note:__ the default value has been learnt empirically from [Homan et al., 2014](https://pubmed.ncbi.nlm.nih.gov/25205807/)
+__--profileWeights__ | | Uses the numeric profile in the structure profile file to weight the bases in order to achieve different per-base modification probabilities
 __-s__ *or* __--readLen__ | int | Length (in bp) of the simulated reads
 __-t__ *or* __--text__ | string | Output MM file's "human-readable" version
 
