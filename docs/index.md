@@ -13,7 +13,7 @@ For support requests, please post your questions to: <https://github.com/dincarn
 
 ## Version
 
-The latest stable version of DRACO is __v1.3__ (released on December 12, 2025)<br/>
+The latest stable version of DRACO is __v1.4__<br/>
 
 
 ## Author(s)

@@ -1,7 +1,12 @@
 The ``simulate_mm`` utility provides a simple way to generate simulated mutation map (MM) files for transcripts forming any number of conformations, mixed at arbitrary stoichiometries.<br/><br/>
 
 # Usage
-To list the required parameters, simply type:
+
+```bash
+$ simulate_mm [options] profiles.txt output.mm
+```
+
+To list all available parameters, simply type:
 
 ```bash
 $ simulate_mm -h
@@ -44,5 +49,5 @@ These files contain entries composed of four parts:
 3. A numeric profile representing the structures indicated in __2__
 4. An empty line, marking the end of the entry
 
-The textual representation uses dots ("__.__") to represent unpaired bases, and "__x__" or parantheses ("__(__" and "__)__") to represent paired bases. No check is made on the proper balancing of parentheses in dot-bracket structures.<br/>The numeric profile must match the textual representation of the structure. In these profiles, __0__ indicates a paired base, while any value __&ge;1__ represents an upaired base (the used numeric value is not relevant to the simulation).<br/><br/>
+The textual representation uses dots ("__.__") to represent unpaired bases, and "__x__" or parantheses ("__(__" and "__)__") to represent paired bases. No check is made on the proper balancing of parentheses in dot-bracket structures.<br/>The numeric profile must match the textual representation of the structure, meaning that only bases marked as unpaired ("__.__") can have a non-zero value. The value determines the probability with which a certain base can be modified in a given profile/conformation.<br/><br/>
 Besides generating an MM file, a new structure profile file will also be generated (controlled via the ``-o`` or ``--outProfiles`` parameter), identical to the one provided as input, but with the numeric profiles updated to the actual mutation counts from the simulation.
